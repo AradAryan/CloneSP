@@ -14,17 +14,18 @@ namespace CloneSP
         /// <summary>
         /// 
         /// </summary>
-        private static string mainPath = @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files";
+        private static string mainPath =
+            @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files";
 
         /// <summary>
         /// 
         /// </summary>
-        private static string outputPath = @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files\output\";
+        private static string outputPath =
+            @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files\output\";
 
         public static void RenameFiles()
         {
             var temp = Directory.GetFiles(mainPath, "*.sql");
-            //Console.WriteLine(Directory.GetFiles(mainPath, "*.sql"));
             var directories = new string[temp.Length];
             StreamReader sr;
             StreamWriter sw;
@@ -33,40 +34,65 @@ namespace CloneSP
                 sr = new StreamReader(item);
                 var context = sr.ReadToEnd();
 
+                ///Replace
                 context = context.Replace("BaseInfo", "AltBaseInfo");
                 context = context.Replace("CustInfo", "AltCustInfo");
-                //context.Contains("create proc") || context.Contains("create procedure");
-                int placementNumber = 0;
-                /*  if (String.Compare(context, "create proc") == 0)
-                  {
-                      Regex.Replace(context, "create proc", "CREATE PROC");
-                      placementNumber = context.IndexOf("CREATE PROC");
-                  }
-                  if (String.Compare(context, "create procedure") == 0)
-                  {
-                      Regex.Replace(context, "create procedure", "CREATE PROCEDURE");
-                      placementNumber = context.IndexOf("CREATE PROCEDURE");
-                  }
-                  */
+
+                ///Extract DB Name
                 string dboName = "";
                 var dbName = new string[context.Length];
                 dbName = context.Split(' ');
                 foreach (var value in dbName)
                 {
                     if (value.Contains("dbo."))
+                    {
                         dboName = value;
+                        break;
+                    }
+                    else dboName = "404";
                 }
-                context.Replace(dboName, dboName + "_alt");
-                sw = new StreamWriter(outputPath + Path.GetFileName(item));
-                sw.Write(context);
-                sw.Flush();
+
+                ///Error Hnadling
+                if (dboName == "404")
+                    break;
+
+                ///Replace DB Name
+                else
+                {
+                    if (dboName.Contains(']'))
+                    {
+                        int index = dboName.IndexOf(']');
+                        dboName.Replace("]", "_alt]");
+                    }
+
+                    if (dboName.Contains("\r"))
+                    {
+                        string[] str = new string[2];
+                        string charIndex = "\r";
+                        str = dboName.Split(charIndex.ToCharArray());
+                        context = context.Replace(str[0], str[0].Replace("]", "_alt]"));
+                    }
+
+                    if (context.Contains(dboName))
+                    {
+                        string[] str = new string[2];
+                        string charIndex = "\r";
+                        str = dboName.Split(charIndex.ToCharArray());
+                        context = context.Replace(str[0], str[0] + "_alt");
+                    }
+
+                    ///Write To File
+                    sw = new StreamWriter(outputPath + Path.GetFileName(item));
+                    sw.Write(context);
+                    sw.Flush();
+                }
             }
-            // sw.Flush();
         }
         static void Main(string[] args)
         {
             RenameFiles();
 
+            Console.WriteLine("Jobs Done!");
             Console.ReadKey();
         }
     }
