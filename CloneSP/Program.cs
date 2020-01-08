@@ -19,7 +19,7 @@ namespace CloneSP
             @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files";
 
         /// <summary>
-        /// Directory of Place Where Program Store Changes There
+        /// Directory of Place Where Program Store Changes There 
         /// </summary>
         private static string outputPath =
             @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files\output\";
