@@ -11,24 +11,34 @@ namespace CloneSP
 {
     class Program
     {
+        #region Fields
         /// <summary>
-        /// 
+        /// Directory of Place That Program Start Reading SQL files Form There
         /// </summary>
         private static string mainPath =
             @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files";
 
         /// <summary>
-        /// 
+        /// Directory of Place Where Program Store Changes There
         /// </summary>
         private static string outputPath =
             @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files\output\";
+        #endregion Fields
 
+        #region Renaming Context Funtion
+        /// <summary>
+        /// Main Funtion => Start Renaming Context
+        /// </summary>
         public static void RenameFiles()
         {
+            ///Get List Of SQL Files
             var temp = Directory.GetFiles(mainPath, "*.sql");
-            var directories = new string[temp.Length];
+
+            ///Creating Instance of Streams For Read & Write
             StreamReader sr;
             StreamWriter sw;
+
+            ///Reading File
             foreach (var item in temp)
             {
                 sr = new StreamReader(item);
@@ -88,6 +98,9 @@ namespace CloneSP
                 }
             }
         }
+        #endregion Renaming Context Funtion
+
+        #region Main Function
         static void Main(string[] args)
         {
             RenameFiles();
@@ -95,5 +108,6 @@ namespace CloneSP
             Console.WriteLine("Jobs Done!");
             Console.ReadKey();
         }
+        #endregion Main Function
     }
 }
