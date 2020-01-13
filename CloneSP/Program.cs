@@ -16,7 +16,7 @@ namespace CloneSP
         /// Directory of Place That Program Start Reading SQL files Form There
         /// </summary>
         private static string mainPath =
-            @"C:\Users\faranam\Desktop\Desktop\Exam\05 - clone SP\files";
+            @"C:\Users\faranam\Desktop\Exam\05 - clone SP\files";
 
         /// <summary>
         /// Directory of Place Where Program Store Changes There
@@ -46,10 +46,12 @@ namespace CloneSP
                 var context = sr.ReadToEnd();
 
                 ///Replace
-                context = Regex.Replace(context, "BaseInfo", "AltBaseInfo", RegexOptions.IgnoreCase);
-                context = Regex.Replace(context, "CustInfo", "AltCustInfo", RegexOptions.IgnoreCase);
-                context = Regex.Replace(context, "(create procedure)", "ALTER PROC", RegexOptions.IgnoreCase);
-                context = Regex.Replace(context, "(create proce)", "ALTER PROCEDURE ", RegexOptions.IgnoreCase);
+                context = Regex.Replace(context, @"CREATE\s*PROC\W", "alter proc ", RegexOptions.IgnoreCase);
+                context = Regex.Replace(context, @"CREATE\s*PROCEDURE\W", "alter proc " , RegexOptions.IgnoreCase);
+
+                context = Regex.Replace(context, @"(BaseInfo\].dbo.)", "Alt$1", RegexOptions.IgnoreCase);
+                context = Regex.Replace(context, @"(BaseInfo.dbo.)", "Alt$1", RegexOptions.IgnoreCase);
+
                 context = Regex.Replace(context, @"(\sdbo.\[\w+)(\b)", "$1_Alt", RegexOptions.IgnoreCase);
                 context = Regex.Replace(context, @"(\sdbo.\w+)(\b)", "$1_Alt", RegexOptions.IgnoreCase);
 
